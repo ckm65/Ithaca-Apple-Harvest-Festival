@@ -127,11 +127,17 @@ CREATE TABLE image_tags (
 SELECT gallery.gallery_id, tags.tags_id FROM gallery LEFT OUTER JOIN jobs on gallory.major_id = tags.major_id;
 SELECT gallery.file_name, tags.name FROM gallery LEFT OUTER JOIN jobs on gallory.major_id = tags.major_id;
 
+Honestly at the moment I'm not entirely sure which of these I will use but this is my plan so far!
 // find the query where the name in the gallery tag connects to the name in the tags table
+    - inner join
 // find the query where the gallery id and the tags ID align
+    - left outer join
 // find a query where it states the number of tags per image
+    - looking at the specific number by name in tags and gallery table
 // find the query where no tags are there
+    - tags == null or 0
 // find a query that calculates the amount of gallery images per tag
+    - maybe do a for loop
 
 
 ## Code Planning (Milestone 1)
