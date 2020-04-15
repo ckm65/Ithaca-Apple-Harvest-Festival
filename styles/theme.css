@@ -1,0 +1,332 @@
+body {
+  font-family: sans-serif;
+  padding: 10px 10px;
+  vertical-align: middle;
+  background-color: #f5eac4;
+}
+
+h1 {
+  color: black;
+  padding-left:250px;
+  font-family:cursive;
+  font-size: 50px;
+  text-decoration: #3bb327 underline;
+  margin:auto;
+  display:block;
+}
+
+nav {
+    display:inline-block;
+    color:green;
+
+}
+nav ul li a:link, nav ul li a:visited {
+  color: #F9AB33;
+}
+nav ul li {
+  font-size: .8em;
+  text-transform: uppercase;
+  flex: none;
+}
+nav ul li a {
+  display: block;
+  border: 1px solid;
+  padding: .4em 1em;
+  border-radius: 1.3em;
+  margin: .25em;
+}
+nav ul {
+  margin: 0;
+  padding-left: 100px;
+  padding-right: 100px;
+  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+nav li {
+    margin: 0;
+    padding: 10px;
+    display: inline;
+  }
+.locate{
+    text-align:right;
+}
+.current_page {
+    border:3px dotted brown;
+    padding: 4px;
+  }
+.form_feedback {
+    text-align: left;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: red;
+    font-size: 15px;
+  }
+footer {
+    padding: 3px 3px;
+    background-size: contain;
+    background-color:#b52019;
+  }
+
+p {
+  color: black;
+  font-size: 20px;
+  text-align:center;
+  font-family:georgia;
+}
+.menu{
+    display:inline-block;
+  list-style-type:armenian;
+  color: purple;
+  text-align: left;
+  padding: 20px;
+  text-decoration:none;
+  border-style:none;
+  border-color:black;
+  margin-left: 20px;
+  margin-right: 20px;
+  font-family: verdana, sans-serif;
+}
+
+h2 {
+    color: white;
+    text-align: center;
+    text-decoration:orange underline;
+    font-size: 30px;
+    font-family:garamond;
+    padding: 0;
+    background-color:#b52019;
+}
+li {
+  color: black;
+  font-family: verdana;
+  padding: 0;
+  text-align:center;
+  list-style-position: inside;
+
+
+}
+.images1{
+    display:flex;
+    flex-direction:row;
+    flex-wrap: nowrap;
+    padding: 0px;
+    margin: 0px;
+}
+.images2{
+    display:flex;
+    flex-direction:row;
+    flex-wrap: nowrap;
+    padding: 0px;
+    margin: 0px;
+}
+.images2{
+    display:flex;
+    flex-direction:row;
+    flex-wrap: nowrap;
+    padding: 0px;
+    margin: 0px;
+}
+.images3{
+    display:flex;
+    flex-direction:row;
+    flex-wrap: nowrap;
+    padding: 0px;
+    margin: 0px;
+}
+
+em {
+   font-weight: bold;
+   color: #3bb327;
+}
+blockquote {
+  color: black;
+  text-align:center;
+  text-decoration:underline;
+}
+h3 {
+    color: white;
+    text-align: center;
+    text-decoration:red underline;
+    font-size: 30px;
+    font-family:garamond;
+    padding: 0;
+    background-color:orange;
+}
+h4 {
+    color:#e88123;
+    font-size: 20px;
+    text-align: center;
+    text-decoration: underline;
+}
+h5{
+    color: green;
+    text-align:center;
+    font-size:20px;
+
+}
+.hotel {
+    display: block;
+    max-width: 100%;
+}
+.hotel p {
+    font-size:15px;
+
+}
+
+.location {
+    padding:0px;
+    margin:0px;
+}
+
+dl {
+  text-align: center;
+  margin: 0;
+  padding:15px;
+  margin-top: 10px;
+  border:4px solid purple;
+}
+
+dt {
+    padding-top:10px;
+    padding-bottom:5px;
+    text-align: center;
+    text-decoration: underline;
+    text-decoration-style:double;
+    text-decoration-color: purple;
+    color:#c45138
+
+}
+.vendorimages{
+    display:flex;
+    flex-direction:row;
+    flex-wrap: nowrap;
+    padding: 0px;
+    margin: 0px;
+}
+
+.vendors{
+    padding:10px;
+}
+.hidden {
+    display: none;
+  }
+
+  .errorContainer {
+    display: inline-block;
+
+    color: red;
+    padding-left: 5px;
+
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .formId{
+      display:flex;
+      flex-direction:row;
+      padding:10px;
+
+  }
+  .formId2{
+      display:flex;
+      flex-direction:row;
+      padding:10px;
+
+  }
+  .formId3{
+      display:flex;
+      flex-direction:row;
+      padding:10px;
+
+  }
+  .formId4{
+      display:block;
+      padding:10px;
+  }
+/* mobile */
+	@media (max-width: 600px) {
+    .navbar{
+        display:flex;
+        flex-direction:row;
+        flex-wrap: nowrap;
+
+        }
+
+        nav ul {
+            flex:1 1 50%;
+        }
+
+        li.menu {
+            margin: 0;
+        }
+    h1 {
+        text-align: center;
+        font-size: 35px;
+        display:block;
+        padding-left: 10px;
+        max-width:100%
+    }
+    .logo img{
+        display: block;
+        max-width: 100%;
+    }
+    .location img{
+        display: block;
+        max-width: 100%;
+    }
+    .monk img{
+        display: block;
+        max-width: 100%;
+    }
+    .cider img{
+        display: block;
+        max-width: 100%;
+    }
+    .vendorimages img{
+        display: block;
+        max-width: 100%;
+    }
+    .map img{
+        display: block;
+        max-width: 100%;
+    }
+    .images1 img{
+        display: block;
+        max-width: 100%;
+    }
+    .images2 img{
+        display: block;
+        max-width: 100%;
+    }
+    .images3 img{
+        display: block;
+        max-width: 100%;
+    }
+
+
+    .formId{
+        display:flex;
+        flex-direction:row;
+        text-align: center;
+        padding:10px;
+
+    }
+    .formId2{
+        display:flex;
+        flex-direction:row;
+        padding:10px;
+
+    }
+    .formId3{
+        display:flex;
+        flex-direction:row;
+        padding:10px;
+
+    }
+    .formId4{
+        display:block;
+        padding:10px;
+    }
+
+    }
