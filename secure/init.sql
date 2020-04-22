@@ -22,12 +22,7 @@ INSERT INTO photo (id, name, count, description, source) VALUES (11, 'Caramel Ap
 INSERT INTO photo (id, name, count, description, source) VALUES (12, 'Friends', 12, 'Come to the festival with friends to make memories that will last a lifetime', 'https://s3.amazonaws.com/exposure-media/production/photos/dvykxxyvmvl472wy1i2ju4n29czznsxeszdx/original.jpg?fm=pjpg&auto=format&fm=jpg&w=300');
 
 
-
-
-
-
-
--- Reviews Table
+-- Gallery Table
 CREATE TABLE gallery (
     gallery_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
     file_name TEXT,
@@ -44,7 +39,7 @@ INSERT INTO gallery (gallery_id, file_name, file_ext, description) VALUES (5, 'j
 INSERT INTO gallery (gallery_id, file_name, file_ext, description) VALUES (6, 'sign.jpg', 'jpg', 'Cider Donut Sign');
 INSERT INTO gallery (gallery_id, file_name, file_ext, description) VALUES (7, 'pie.jpg', 'jpg', 'Pie');
 INSERT INTO gallery (gallery_id, file_name, file_ext, description) VALUES (8, 'corn.jpg', 'jpg', 'Corn');
-INSERT INTO gallery (gallery_id, file_name, file_ext, description) VALUES (9, 'hard_cider.jpg', 'jpeg', 'Hard Cider Stand');
+INSERT INTO gallery (gallery_id, file_name, file_ext, description) VALUES (9, 'hard_cider.jpg', 'jpg', 'Hard Cider Stand');
 INSERT INTO gallery (gallery_id, file_name, file_ext, description) VALUES (10, 'friends.jpg', 'jpg', 'Friends');
 INSERT INTO gallery (gallery_id, file_name, file_ext, description) VALUES (11, 'caramel_apples.jpg', 'jpg', 'Caramel Apples');
 INSERT INTO gallery (gallery_id, file_name, file_ext, description) VALUES (12, 'apple_picking.jpg', 'jpg', 'Apple Picking');
