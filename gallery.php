@@ -36,8 +36,13 @@ foreach ($records as $record) {
   ?>
 </div>
 
+
+
 <!-- Trigger the Modal -->
-<img id="myImg" src="1.jpg" alt="Gallery" style="width:100%;max-width:300px">
+<?php
+
+?>
+<img id="myImg" src="uploads/festival/1.jpg" alt="Apples&Cider" style="width:100%;max-width:300px">
 
 <!-- The Modal -->
 <div id="myModal" class="modal">
