@@ -330,3 +330,23 @@ dt {
     }
 
     }
+
+    .group_label_input {
+        align-items: center;
+        padding-left: 375px;
+        padding-right: 375px;
+    }
+
+    .photo_gallery {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+
+      .photo_gallery figure img {
+        height: 200px;
+      }
+
+      .photo_gallery figcaption {
+        text-align: center;
+      }

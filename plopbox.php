@@ -3,6 +3,43 @@ include("includes/init.php");
 $header_nav_class7 = "current_page";
 $title = "Plop Box";
 
+$messages = array();
+const MAX_FILE_SIZE = 1000000;
+
+if (isset($_POST["submit_upload"])) {
+
+
+  $upload_info = $_FILES["box_file"];
+
+  $upload_description = trim($_POST["description"]);
+  $upload_description = filter_var($upload_description, FILTER_SANITIZE_STRING);
+
+  if($upload_info['error'] == UPLOAD_ERR_OK && $upload_description != ''){
+    $basename = basename($upload_info['name']);
+    $upload_ext = strtolower( pathinfo($basename, PATHINFO_EXTENSION) );
+
+    $sql = "INSERT INTO gallery (file_name,file_ext, description) VALUES ( :file_name, :file_ext, :description)";
+    $params = array(
+      ':file_name' => $basename,
+      ':file_ext' => $upload_ext,
+      ':description' => $upload_description
+    );
+
+    $result = exec_sql_query($db, $sql, $params);
+    if ($result){
+      $new_identification = $db->lastInsertId("id");
+      $new_path = "./uploads/festival/" . $new_identification . "." . $upload_ext;
+      move_uploaded_file( $upload_info["tmp_name"], $new_path );
+      array_push($messages, "You have sucessfully uploaded a file!");
+    } else {
+      array_push($messages, "Failed to Upload File. Please Fill our parameters");
+    };
+  }
+  else {
+      array_push($messages,"Failed to Upload File. Please Try Again");
+    }
+  }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,13 +64,37 @@ $header_nav_class = "current_page";
 
 <h2> Upoad a File to the Ithaca Apple Harvest Festival Plop Box </h2>
 
+<?php foreach ($messages as $message) {
+        echo "<p><strong>" . htmlspecialchars($message) . "</strong></p>\n";
+      } ?>
+<div id = upload>
+<form id="uploadFile" action="plopbox.php" enctype= "multipart/form-data" method = "POST"  >
+
+      <input type="hidden" name="MAX_FILE_SIZE" value= "<?php echo MAX_FILE_SIZE; ?>" />
+
+      <div class="group_label_input">
+        <label for="box_file">Upload File:</label>
+        <input id="box_file" type="file" name="box_file">
+      </div>
+
+      <div class="group_label_input">
+        <label for="box_desc">Description:</label>
+        <textarea id="box_desc" name="description" cols="40" rows="5"></textarea>
+      </div>
+
+      <div class="group_label_input">
+        <span></span>
+        <button name="submit_upload" type="submit">Upload File</button>
+      </div>
+    </form>
+</div>
 <h2> Saved Files </h2>
 
 <ul style = "list-style-type:none">
       <?php
-      $result = exec_sql_query($db, "SELECT * FROM gallery")->fetchAll(PDO::FETCH_ASSOC);
-      foreach ($result as $record) {
-        echo "<li><a href=\"uploads/gallery/" . $record["id"] . "." . $record["file_ext"] . "\">" . htmlspecialchars($record["file_name"]) . "</a> - " . htmlspecialchars($record["description"]) . "</li>";
+      $records = exec_sql_query($db, "SELECT * FROM gallery")->fetchAll(PDO::FETCH_ASSOC);
+      foreach ($records as $record) {
+        echo "<li><a href=\"uploads/festival/" . $record["gallery_id"] . "." . $record["file_ext"] . "\">" . htmlspecialchars($record["file_name"]) . "</a> - " . htmlspecialchars($record["description"]) . "</li>";
       }
       ?>
     </ul>
