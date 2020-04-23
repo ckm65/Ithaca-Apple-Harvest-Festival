@@ -18,11 +18,12 @@ if (isset($_POST["submit_upload"])) {
     $basename = basename($upload_info['name']);
     $upload_ext = strtolower( pathinfo($basename, PATHINFO_EXTENSION) );
 
-    $sql = "INSERT INTO gallery (file_name,file_ext, description) VALUES ( :file_name, :file_ext, :description)";
+    $sql = "INSERT INTO gallery (file_name,file_ext, description,source) VALUES ( :file_name, :file_ext, :description, :source)";
     $params = array(
       ':file_name' => $basename,
       ':file_ext' => $upload_ext,
-      ':description' => $upload_description
+      ':description' => $upload_description,
+      ':source' => $upload_source
     );
 
     $result = exec_sql_query($db, $sql, $params);

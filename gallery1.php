@@ -38,48 +38,45 @@ function photography_element($photography)
 <?php
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title> The Ithaca Apple Harvest Festival </title>
-    <link rel="stylesheet" type="text/css" href="styles/theme.css" media="screen" />
-</head>
-<body>
-<?php
-include("includes/header.php");
-$title = "Header";
-$header_nav_class = "current_page";
 
-?>
-
-    <form id="photoForm" action="gallery.php" method="get">
-      <label for="photo_field">Search:</label>
-      <input type="text" id="photo_field" name="search" value="<?php echo htmlspecialchars(!empty($sticky_search) ? $sticky_search : ''); ?>" />
-
-      <button type="submit">Check</button>
-    </form>
-
-    <div class="photo_gallery">
-      <?php
-      if (count($photography) > 0) {
-        foreach ($photography as $p) {
-          photography_element($p);
-        }
-      } else { ?>
-        <p>No photographs matched your search.</p>
-      <?php } ?>
-    </div>
-
-    <?php if ($sticky_search) { ?>
-      <form action="gallery.php" method="get">
-        <button type="submit">Clear Search</button>
-      </form>
-    <?php } ?>
 
   </main>
 
   <?php include("includes/footer.php"); ?>
 </body>
 
+
+<div id = galleryContainer>
+
+
+ <?php
+
+ $records = exec_sql_query($db, "SELECT * from gallery", array()) -> fetchAll(PDO::FETCH_ASSOC);
+ foreach ($records as $record) {
+   echo '<img class = "group_label_input" alt = "Gallery Pictures" src = "uploads/festival/' . $record["gallery_id"] . "." .$record["file_ext"] .'"/>';
+ }
+   ?>
+ </div>
+
 </html>
+<img id="myImg" src="img_snow.jpg" alt="Snow" style="width:100%;max-width:300px"> <div id="myModal" class="modal"><span class="close">&times;</span> <img class="modal-content" id="img01">  <div id="caption"></div>
+</div>
+
+
+foreach ($records as $record) { ?>
+
+<img id ="myImg" src="uploads/festival/"<?php .$record["gallery_id"]. "." .$record["file_ext"]. '">'; ?> alt=<?php .$record["description"]. '"/>'
+
+< style="width:100%;max-width:300px">
+
+<div id="myModal" class="modal">
+<span class="close">&times;</span>
+
+
+ <img class="modal-content" id="img01">
+
+
+ <div id="caption"></div>"." .$record["file_ext"] .'"/>';
+}
+?>
+</div>

@@ -26,22 +26,18 @@ $header_nav_class = "current_page";
 ?>
 <div id = galleryContainer>
 
-
 <?php
 
 $records = exec_sql_query($db, "SELECT * from gallery", array()) -> fetchAll(PDO::FETCH_ASSOC);
 foreach ($records as $record) {
+
   echo '<img class = "group_label_input" alt = "Gallery Pictures" src = "uploads/festival/' . $record["gallery_id"] . "." .$record["file_ext"] .'"/>';
 }
   ?>
 </div>
 
 
-
 <!-- Trigger the Modal -->
-<?php
-
-?>
 <img id="myImg" src="uploads/festival/1.jpg" alt="Apples&Cider" style="width:100%;max-width:300px">
 
 <!-- The Modal -->
