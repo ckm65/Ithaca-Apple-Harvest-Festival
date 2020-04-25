@@ -21,14 +21,13 @@ $header_nav_class = "current_page";
 <main>
 <div class="test2">
 
-  <!-- TODO: This should be your main page for your site. -->
 <form id="search_form" action="gallery.php" method="get">
       <label id= "tag_field" for="search_text">Search a Tag:</label>
       <input id="search_text" type="text" name="image" value="<?php if ( isset($image) ) { echo htmlspecialchars($image); } ?>" placeholder="i.e. apples"/>
       <button id="search_submit" name="search_button" type="submit">Search</button>
 </form>
 
-<!-- Check to see if the form was submitted. And if so, then set a new variable called $show_image_results and set it equal to true so that only the results of that search appear. If it is set to FALSE then all of the images of the SQL query will actually execute. -->
+
 <?php
 
 if (isset($_GET['image'])) {
@@ -64,7 +63,6 @@ if (count($result) > 0) {
   ?><div id="galleryContainer">
   <?php
   foreach($result as $image) {
-    // echo "<img class='gallery_image' src=\"uploads/images/" . $image["id"] . "." . $image["image_ext"] . "\"/>";
     echo "<div class='source'>";
     echo "<a href=\"image_details.php?" . http_build_query(array( 'id' => $image['id'])) . "\"><img class=\"gallery_image\" alt=\"image\" src=\"uploads/festival/"  . $image["id"] . "." . $image["image_ext"] . "\"/></a>";
     echo "<p class='white'> " .  $image['description'] . "</p>";
@@ -82,7 +80,7 @@ if (count($result) > 0) {
 <div id="galleryContainer">
 <?php
 foreach($found_images as $image) {
-  // print_image_thumb($img);
+
   echo "<a href=\"image_details.php?" . http_build_query(array( 'id' => $image['id'])) . "\"><img class=\"gallery_image\" src=\"uploads/festival/" . $image["id"] . "." . $image["image_ext"] . "\"/></a>";
 }
 ?></div><?php
