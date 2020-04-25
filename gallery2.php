@@ -125,3 +125,45 @@ $footer_nav_class = "current_page";
 </body>
 
 </HTML>
+
+<div id = galleryContainer>
+
+<?php
+
+$records = exec_sql_query($db, "SELECT * from gallery", array()) -> fetchAll(PDO::FETCH_ASSOC);
+foreach ($records as $record) {
+
+  echo '<img class = "group_label_input" alt = "Gallery Pictures" src = "uploads/festival/' . $record["gallery_id"] . "." .$record["file_ext"] .'"/>';
+}
+  ?>
+</div><div id = galleryContainer>
+
+<?php
+
+$records = exec_sql_query($db, "SELECT * from gallery", array()) -> fetchAll(PDO::FETCH_ASSOC);
+foreach ($records as $record) {
+
+  echo '<img class = "group_label_input" alt = "Gallery Pictures" src = "uploads/festival/' . $record["gallery_id"] . "." .$record["file_ext"] .'"/>';
+}
+  ?>
+</div>
+
+
+$record_tag = exec_sql_query($db, "SELECT tags.tag_name, image_tags.tag_id, image_tags.gallery_id FROM tags INNER JOIN image_tags ON tags.id = image_tags.tag_id INNER JOIN gallery ON gallery.gallery_id = image_tags.gallery_id")-> fetchAll(PDO::FETCH_ASSOC);
+
+}
+
+
+
+
+  ?>
+
+<ul class = tag_list>
+  <?php
+  foreach($record_tag as $record_tag){
+    if ($record["gallery_id"] == $record_tag["image_id"]){
+      echo "<li class = 'tag_column'>#" . $record_tag["tag_name"] . "</li>";
+    }
+
+  }
+  ?>

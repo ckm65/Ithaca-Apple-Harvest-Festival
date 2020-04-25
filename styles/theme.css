@@ -367,3 +367,28 @@ dt {
       .photo figcaption {
         text-align: center;
       }
+
+      #detail_container img {
+          height: 199px;
+          width: 300px;
+          padding-left: 400px;
+          align-items: center;
+      }
+
+      #tagss {
+        display: inline-block;
+        white-space: nowrap;
+        max-width: 900px;
+    }
+
+    #enlarge {
+        padding-left: 250px;
+        height: 400px;
+        width: 550px;
+
+
+    }
+    #enlarge p {
+       color:red;
+
+    }

@@ -18,10 +18,10 @@ if (isset($_POST["submit_upload"])) {
     $basename = basename($upload_info['name']);
     $upload_ext = strtolower( pathinfo($basename, PATHINFO_EXTENSION) );
 
-    $sql = "INSERT INTO gallery (file_name,file_ext, description,source) VALUES ( :file_name, :file_ext, :description, :source)";
+    $sql = "INSERT INTO images (image_name,image_ext, description,source) VALUES ( :image_name, :image_ext, :description, :source)";
     $params = array(
-      ':file_name' => $basename,
-      ':file_ext' => $upload_ext,
+      ':image_name' => $basename,
+      ':image_ext' => $upload_ext,
       ':description' => $upload_description,
       ':source' => $upload_source
     );
@@ -93,9 +93,9 @@ $header_nav_class = "current_page";
 
 <ul style = "list-style-type:none">
       <?php
-      $records = exec_sql_query($db, "SELECT * FROM gallery")->fetchAll(PDO::FETCH_ASSOC);
+      $records = exec_sql_query($db, "SELECT * FROM images")->fetchAll(PDO::FETCH_ASSOC);
       foreach ($records as $record) {
-        echo "<li><a href=\"uploads/festival/" . $record["gallery_id"] . "." . $record["file_ext"] . "\">" . htmlspecialchars($record["file_name"]) . "</a> - " . htmlspecialchars($record["description"]) . "</li>";
+        echo "<li><a href=\"uploads/festival/" . $record["id"] . "." . $record["image_ext"] . "\">" . htmlspecialchars($record["image_name"]) . "</a> - " . htmlspecialchars($record["description"]) . "</li>";
       }
       ?>
     </ul>

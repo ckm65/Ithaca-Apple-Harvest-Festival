@@ -3,7 +3,66 @@ include("includes/init.php");
 $header_nav_class3 = "current_page";
 $title = "Gallery";
 ?>
+<?php
+include("includes/header.php");
+$title = "Header";
+$header_nav_class = "current_page";
 
+?>
+ <?php
+if (isset($_GET['id'])) {
+    $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+
+    $sql= "SELECT * FROM images WHERE id = :id;";
+    $params = array (
+        ':id' => $id
+    );
+    $result = exec_sql_query($db, $sql, $params);
+
+    if ($result) {
+        $images = $result->fetchALL();
+        $image = $images[0];
+    }
+}
+
+if (isset($_GET['image'])) {
+    $name = filter_input(INPUT_GET, 'image', FILTER_SANITIZE_STRING);
+    $name = strtolower($name);
+
+    $sql = "SELECT * FROM images WHERE LOWER(name)= :name;";
+    $params = array ( ':name' => $name);
+    $result = exec_sql_query($db, $sql, $params);
+    if ($result) {
+        $images = $result->fetchALL();
+        $image = $images[0];
+    }
+}
+?>
+
+<?php if (isset($image)) { ?>
+
+<figure>
+    <div class="enlarge">
+    <img id="enlarge" src="uploads/festival/<?php echo $image['id']; ?>.<?php echo $image['image_ext']?>" alt="<?php echo htmlspecialchars($image['image_name']); ?>" />
+</div>
+</figure>
+<div>
+<blockquote>
+    <p id="desc_page"><?php echo htmlspecialchars($image['description']); ?></p>
+</blockquote>
+<blockquote>
+    <p id="desc_source">Source: <?php echo htmlspecialchars($image['source']); ?></p>
+</blockquote>
+</div>
+<p class="parts">Tags: </p>
+<div class="center_new">
+<?php $records = $result->fetchAll();
+foreach($records as $record) {
+    echo "<span class='white_center'>" . $record['tag_name'] .'  ' . "</span>";
+}  ?>
+
+<?php }; ?>
+</div>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,37 +73,9 @@ $title = "Gallery";
 
 </head>
 <body>
-<?php
- if (isset($_GET['gallery_id'])) {
-     $click_input = $_GET['gallery_id'];
- }
 
- // find the corresponding image that was clicked
- $sql = "SELECT gallery_id, file_ext FROM gallery WHERE id = :id_val";
- $params = array(
-     ':id_val' => $click_input
- );
 
- $show_images = exec_sql_query($db, $sql, $params) -> fetchAll();
-  ?>
- <div id = "detail_container">
 
- <?php echo '<img class = "group_label_input" src = "uploads/festival/ ' . $show_images[0][0] . "." . $show_imges[0][1] . '"/>';
- ?>
-
-<?php
-
-$clicks = exec_sql_query($db, "SELECT DISTINCT * from gallery WHERE gallery_id = $click_input", array()) -> fetchAll(PDO::FETCH_ASSOC);
-
-foreach ($clicks as $click) {
-    echo '<img class = "group_label_input" alt = "Gallery Pictures" src = "uploads/festival/' . $record["gallery_id"] . "." .$record["file_ext"] .'"/>' ;
-}
-  ?>
-<?php
-include("includes/header.php");
-$title = "Header";
-$header_nav_class = "current_page";
-?>
 
 <?php include("includes/footer.php"); ?>
 </body>

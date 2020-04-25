@@ -5,41 +5,117 @@ $title = "Gallery";
 ?>
 
 <!-- FULL GALLERY-->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title> The Ithaca Apple Harvest Festival </title>
     <link rel="stylesheet" type="text/css" href="styles/theme.css" media="screen" />
-    <script src="scripts/jquery-3.4.1.min.js" type = "text/javascript"></script>
-    <script src="scripts/validation.js" type = "text/javascript"></script>
 </head>
-<body>
-
 <?php
 include("includes/header.php");
 $title = "Header";
 $header_nav_class = "current_page";
 ?>
 
-<div id = galleryContainer  >
+<main>
+<div class="test2">
+
+  <!-- TODO: This should be your main page for your site. -->
+<form id="search_form" action="gallery.php" method="get">
+      <label id= "tag_field" for="search_text">Search a Tag:</label>
+      <input id="search_text" type="text" name="image" value="<?php if ( isset($image) ) { echo htmlspecialchars($image); } ?>" placeholder="i.e. apples"/>
+      <button id="search_submit" name="search_button" type="submit">Search</button>
+</form>
+
+<!-- Check to see if the form was submitted. And if so, then set a new variable called $show_image_results and set it equal to true so that only the results of that search appear. If it is set to FALSE then all of the images of the SQL query will actually execute. -->
 <?php
 
-$records = exec_sql_query($db, "SELECT * from gallery", array()) -> fetchAll(PDO::FETCH_ASSOC);
-foreach ($records as $record) {
-  echo '<a class = "link_container" href = "image_details.php?'. http_build_query(array('gallery_id' => $record['gallery_id'])) . '"> <img class = "group_label_input" alt = "Gallery Pictures" src = "uploads/festival/' . $record["gallery_id"] . "." .$record["file_ext"] .'"/></a>' . PHP_EOL;
+if (isset($_GET['image'])) {
+  $show_image_results = FALSE;
 
+  $image = filter_input(INPUT_GET, 'image', FILTER_SANITIZE_STRING);
+  $image = strtolower(trim($image));
 
+  if ($image != '') {
+    $show_image_results = TRUE;
+
+    $sql = "SELECT * FROM tags INNER JOIN image_tags ON tags.id = image_tags.tags_id INNER JOIN images ON image_tags.images_id = images.id WHERE tags.tag_name LIKE '%' || :search || '%'";
+    $params = array (
+      ':search' => $image
+    );
+    $result = exec_sql_query($db, $sql, $params);
+    if ($result) {
+      $found_images = $result->fetchALL();
+    }
+  }
+} else {
+  $show_image_results = FALSE;
+}
+?>
+
+<?php if ($show_image_results == FALSE ) {
+
+$result = exec_sql_query(
+  $db, "SELECT * FROM images",
+  array());
+
+if (count($result) > 0) {
+  ?><div id="galleryContainer">
+  <?php
+  foreach($result as $image) {
+    // echo "<img class='gallery_image' src=\"uploads/images/" . $image["id"] . "." . $image["image_ext"] . "\"/>";
+    echo "<div class='source'>";
+    echo "<a href=\"image_details.php?" . http_build_query(array( 'id' => $image['id'])) . "\"><img class=\"gallery_image\" alt=\"image\" src=\"uploads/festival/"  . $image["id"] . "." . $image["image_ext"] . "\"/></a>";
+    echo "<p class='white'> " .  $image['description'] . "</p>";
+    echo "</div>";
+
+  }
+  ?></div>
+  <?php
+} else {
+  echo '<p>Currently no posts are available.</p>';
+}
+} elseif ( isset($found_images)) {?>
+
+<p class="white">Here are the matches for: <strong><?php echo htmlspecialchars( $image ); ?></strong></p>
+<div id="galleryContainer">
+<?php
+foreach($found_images as $image) {
+  // print_image_thumb($img);
+  echo "<a href=\"image_details.php?" . http_build_query(array( 'id' => $image['id'])) . "\"><img class=\"gallery_image\" src=\"uploads/festival/" . $image["id"] . "." . $image["image_ext"] . "\"/></a>";
+}
+?></div><?php
+} else {
+?>
+<p class="white">No results match your search of <strong><?php echo htmlspecialchars( $image );?></strong>. Please use another tag!</p>
+
+<?php } ?>
+<div id="tagss">
+<p>All Tags: </p>
+<?php
+
+$sql_tags2 = "SELECT * FROM tags";
+$params_tags2 = array ();
+$result_tags = exec_sql_query($db, $sql_tags2, $params_tags2);
+
+if ($result_tags) {
+$all_tags = $result_tags->fetchAll();
 }
 
+foreach ($all_tags as $tag) {
+echo "<span class='white_center'>   " . $tag['tag_name'] . "</span>";
+}
+
+?>
+</div>
+
+</div>
+</div>
+</main>
 
 
 
-  ?>
-
-
- </div>
 
   <?php include("includes/footer.php"); ?>
 </body>
