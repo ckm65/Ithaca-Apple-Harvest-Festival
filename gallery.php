@@ -19,11 +19,11 @@ $header_nav_class = "current_page";
 ?>
 
 <main>
-<div class="test2">
+<div class="search">
 
 <form id="search_form" action="gallery.php" method="get">
-      <label id= "tag_field" for="search_text">Search a Tag:</label>
-      <input id="search_text" type="text" name="image" value="<?php if ( isset($image) ) { echo htmlspecialchars($image); } ?>" placeholder="i.e. apples"/>
+      <label id= "search_field " for="search_tag">Search a Tag:</label>
+      <input id="search_tag" type="text" name="image" value="<?php if ( isset($image) ) { echo htmlspecialchars($image); } ?>" placeholder="i.e. #apples"/>
       <button id="search_submit" name="search_button" type="submit">Search</button>
 </form>
 
@@ -45,7 +45,7 @@ if (isset($_GET['image'])) {
     );
     $result = exec_sql_query($db, $sql, $params);
     if ($result) {
-      $found_images = $result->fetchALL();
+      $all_images = $result->fetchALL();
     }
   }
 } else {
@@ -63,9 +63,10 @@ if (count($result) > 0) {
   ?><div id="galleryContainer">
   <?php
   foreach($result as $image) {
+
     echo "<div class='source'>";
-    echo "<a href=\"image_details.php?" . http_build_query(array( 'id' => $image['id'])) . "\"><img class=\"gallery_image\" alt=\"image\" src=\"uploads/festival/"  . $image["id"] . "." . $image["image_ext"] . "\"/></a>";
-    echo "<p class='white'> " .  $image['description'] . "</p>";
+    echo "<a href=\"details.php?" . http_build_query(array( 'id' => $image['id'])) . "\"><img class=\"gallery_image\" alt=\"image\" src=\"uploads/festival/"  . $image["id"] . "." . $image["image_ext"] . "\"/></a>";
+    echo "<p class='name_image'>" .  $image['description'] . "</p>";
     echo "</div>";
 
   }
@@ -74,14 +75,14 @@ if (count($result) > 0) {
 } else {
   echo '<p>Currently no posts are available.</p>';
 }
-} elseif ( isset($found_images)) {?>
+} elseif ( isset($all_images)) {?>
 
-<p class="white">Here are the matches for: <strong><?php echo htmlspecialchars( $image ); ?></strong></p>
+<p class="white">View the images tagged: <strong><?php echo htmlspecialchars( $image ); ?></strong></p>
 <div id="galleryContainer">
 <?php
-foreach($found_images as $image) {
+foreach($all_images as $image) {
 
-  echo "<a href=\"image_details.php?" . http_build_query(array( 'id' => $image['id'])) . "\"><img class=\"gallery_image\" src=\"uploads/festival/" . $image["id"] . "." . $image["image_ext"] . "\"/></a>";
+  echo "<a href=\"details.php?" . http_build_query(array( 'id' => $image['id'])) . "\"><img class=\"gallery_image\" src=\"uploads/festival/" . $image["id"] . "." . $image["image_ext"] . "\"/></a>";
 }
 ?></div><?php
 } else {
@@ -89,33 +90,34 @@ foreach($found_images as $image) {
 <p class="white">No results match your search of <strong><?php echo htmlspecialchars( $image );?></strong>. Please use another tag!</p>
 
 <?php } ?>
+
+<!-- All Tags At footer -->
+
+
 <div id="tagss">
 <p>All Tags: </p>
 <?php
 
-$sql_tags2 = "SELECT * FROM tags";
-$params_tags2 = array ();
-$result_tags = exec_sql_query($db, $sql_tags2, $params_tags2);
+$sql_tag = "SELECT * FROM tags";
+$params_tag = array ();
+$all_tags = exec_sql_query($db, $sql_tag, $params_tag);
 
-if ($result_tags) {
-$all_tags = $result_tags->fetchAll();
+if ($all_tags) {
+$found_all_tags = $all_tags->fetchAll();
 }
 
-foreach ($all_tags as $tag) {
-echo "<span class='white_center'>   " . $tag['tag_name'] . "</span>";
+foreach ($found_all_tags as $tag) {
+echo "<span class='tag_decoration'>" . $tag['tag_name'] . "</span>";
 }
 
 ?>
 </div>
-
 </div>
 </div>
 </main>
-
-
-
-
-  <?php include("includes/footer.php"); ?>
+<?php include("includes/footer.php");?>
 </body>
+
+
 
 </html>
