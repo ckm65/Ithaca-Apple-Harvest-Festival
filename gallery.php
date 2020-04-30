@@ -2,7 +2,9 @@
 include("includes/init.php");
 $header_nav_class3 = "current_page";
 $title = "Gallery";
+$messages = array();
 ?>
+
 
 <!-- FULL GALLERY-->
 <!DOCTYPE html>
@@ -19,11 +21,12 @@ $header_nav_class = "current_page";
 ?>
 
 <main>
+<h2> Welcome to the Ithaca Apple Harvest Festival Gallery! </h2>
 <div class="search">
 
 <form id="search_form" action="gallery.php" method="get">
       <label id= "search_field " for="search_tag">Search a Tag:</label>
-      <input id="search_tag" type="text" name="image" value="<?php if ( isset($image) ) { echo htmlspecialchars($image); } ?>" placeholder="i.e. #apples"/>
+      <input id="search_tag" type="text" name="image" value="<?php if ( isset($image) ) { echo htmlspecialchars($image); } ?>" placeholder="ex. #apples"/>
       <button id="search_submit" name="search_button" type="submit">Search</button>
 </form>
 
@@ -77,8 +80,10 @@ if (count($result) > 0) {
 }
 } elseif ( isset($all_images)) {?>
 
-<p class="white">View the images tagged: <strong><?php echo htmlspecialchars( $image ); ?></strong></p>
+<p class="image_remove">View the images tagged: <strong><?php echo htmlspecialchars( $image ); ?></strong></p>
+
 <div id="galleryContainer">
+
 <?php
 foreach($all_images as $image) {
 
@@ -87,7 +92,7 @@ foreach($all_images as $image) {
 ?></div><?php
 } else {
 ?>
-<p class="white">No results match your search of <strong><?php echo htmlspecialchars( $image );?></strong>. Please use another tag!</p>
+    <p class="image_remove"> No images matched your search of: <strong><?php echo htmlspecialchars( $image );?></strong>. Please search another tag!</p>
 
 <?php } ?>
 

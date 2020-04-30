@@ -41,7 +41,9 @@ This page provides a bunch of different iterations of how I want my gallery to l
 These are my iterations for the plopbox.
 
 ![Gallery Final](gallery_final.jpeg)
-This is what I predict my final gallery will look like. A form to add a class and a search bar to filter through different tags. I am adding some icons to delete specific photos as well as a hover function.
+This is what I predict my final gallery will look like. A form to add a class and a search bar to filter through different tags. I am adding some icons to delete specific photos as well as a click function to view a singular image.
+![Gallery Final Image Details](gallery_details_final.jpeg)
+This is my final design to view image details, view enlarged image, be able to delete an image, adding and removing tags for that specific image.
 ![Plop Box Final](plop_box_final.jpeg)
 This is my final layout design for the plopbox.
 ## Design Patterns (Milestone 1)
@@ -64,29 +66,18 @@ Example:
   - Type: GET
   - Params: id _or_ gallery_id (gallery.id in DB) under the gallery table
 
-  - Request: image details
-  - TYPE: GET
-  - ParamsL id _or gallery_id (from DB)
+- Resquest: see when an image is clicked on
+    - Type: GET
+    - Params: id
 
-- Request: adding a image
-- TYPE: POST
-- Params: form by checking if $valid_form = true
 
-- Request: deleting an image a image
-- TYPE: GET
-- Params: param URL
+- Resquest: Searching a tag
+    - Type: GET
+    - Params: image_id, tag_id
 
-- Request: serach for tags
-- TYPE: GET
-- Params: query string of search fields
 
-- Request: filter by tag
-- TYPE: GET
-- params: query string
 
-- Request: adding a tag
-- TYPE: GET
-- params: query string
+
 
 ## Database Schema Design (Milestone 1)
 > Plan the structure of your database. You may use words or a picture.
@@ -99,22 +90,24 @@ Example:
 
 Example:
 ```
-CREATE TABLE gallery(
-    gallery_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-    file_name TEXT,
-    file_ext TEXT,
-    image_description TEXT
+CREATE TABLE images(
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+    image_name TEXT,
+    image_ext TEXT,
+    description TEXT,
+    source TEXT
 
 );
 
 CREAT TABLE tags (
-    tags_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-    name TEXT
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+    tag_name TEXT
 )
 
 CREATE TABLE image_tags (
-    gallery_id,
-    tags_id
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+    images_id INTEGER NOT NULL,
+    tags_id INTEGER NOT NULL
 )
 )
 ```
@@ -124,21 +117,33 @@ CREATE TABLE image_tags (
 > Plan your database queries. You may use natural language, pseudocode, or SQL.
 > Using your request plan above, plan all of the queries you need.
 
-SELECT gallery.gallery_id, tags.tags_id FROM gallery LEFT OUTER JOIN jobs on gallory.major_id = tags.major_id;
-SELECT gallery.file_name, tags.name FROM gallery LEFT OUTER JOIN jobs on gallory.major_id = tags.major_id;
+<!-- Searching specific tags -->
+"SELECT * FROM tags INNER JOIN image_tags ON tags.id = image_tags.tags_id INNER JOIN images ON image_tags.images_id = images.id WHERE tags.tag_name LIKE '%' || :search || '%'";
 
-Honestly at the moment I'm not entirely sure which of these I will use but this is my plan so far!
-// find the query where the name in the gallery tag connects to the name in the tags table
-    - inner join
-// find the query where the gallery id and the tags ID align
-    - left outer join
-// find a query where it states the number of tags per image
-    - looking at the specific number by name in tags and gallery table
-// find the query where no tags are there
-    - tags == null or 0
-// find a query that calculates the amount of gallery images per tag
-    - maybe do a for loop
+<!--Search for tags -->
+ $sql = "SELECT * FROM images WHERE LOWER(name)= :name;";
 
+ <!-- View all Tags  -->
+ "SELECT * FROM tags";
+<!-- Deleting an Image -->
+"SELECT * FROM images WHERE images.id=:image_delete";
+"DELETE FROM images WHERE images.id=:image_delete";
+"DELETE FROM image_tags WHERE image_tags.images_id=:image_del";
+
+<!-- Adding a Tag -->
+"SELECT * FROM tags WHERE tags.tag_name = :input";
+"SELECT * FROM tags WHERE tags.tag_name = :input";
+"INSERT INTO image_tags(tags_id, images_id) VALUES (:id_add, :image_add)";
+
+<!-- Deleting a Tag -->
+"DELETE FROM image_tags
+WHERE tags_id = :tag_del AND images_id = :current_image" ;
+"SELECT id FROM tags WHERE tag_name IS :current_tag_name";
+<!-- Join tags for images -->
+$sql = "SELECT * FROM image_tags
+INNER JOIN images ON image_tags.images_id = images.id
+INNER JOIN tags ON image_tags.tags_id=tags.id
+WHERE images.id=:image";
 
 ## Code Planning (Milestone 1)
 > Plan what top level PHP pages you'll need.
@@ -187,37 +192,78 @@ if the user clicks on the delete link , then
 > For each set of instructions, assume the grader is starting from index.php.
 
 Viewing all images in your gallery:
-1.
-2.
+1. Starting from the index.php page look at the header
+2. Click the gallery page
+3. You should see a full image gallery containing 12 pictures
 
 View all images for a tag:
-1.
-2.
+1. Starting from the index.php page look at the header
+2. Click on the gallery page
+3. You should now see a full image gallery containing 12 picture and a search box that has a placeholder # apples
+4. at the bottom of the gallery.php page in the left corner above their header there is a black box containing the text tags with a list of all the 5 tags associated with my gallery.
+5. Type into the serach box the tag you are looking for and the images will appear with that tag with a feedback message "View the images tagged: #____"
+6. For example type #apples into the serach bar and you will receive a message "View the images tagged: #apples with 7 images attached.
 
 View a single image and all the tags for that image:
-1.
-2.
+1. Starting at the index.php page look at the header
+2. Click on the gallery page
+3. You should now be viewing a gallery with 12 pictures and a search bar
+4. Click on a singular image
+5. it will take you to a image_details page linked to the gallery.php page
+6. this page will included an enlarged photo of the one that you clicked on, the name of the image, the source of the image, the tags associated with that image, an option to edit the tags for example add or delete a tag, it finally gives you the option to remove that image which will be deleted with a feedback message and will then be deleted from the entire gallery page
+7. to navigate back to the gallery page press gallery in the header
 
 How to upload a new image:
-1.
-2.
+1. Starting at the index.php page look at the header
+2. Click on the plop box page
+3. click upload image
+4.provide a caption (caption is required you should receive a feedback message if you don't fill out categories)
+5. press upload file and it should show up in the uploads folder as well as show up on the gallery page
+    - you should receive a feedback message that it was sucessfully uploaded
 
 How to delete an image:
-1.
-2.
+1. Starting at the index.php page look at the header
+2. Click on the gallery page
+3. You should now be viewing a full gallery page containing 12 images and a search bar
+4. Click on one of the images
+5. You should now be viewing an enlarged image of the one you selected on, the name of the image, the source, the tags, an option to add a tag, an option to delete a tag, and a Delete imgae button
+6. Click on the delete imgage button
+    - you should receive a feedback message "The image has been removed from the gallery!"
+    - if you return to the gallery page, the image should be removed as well
 
 How to view all tags at once:
-1.
-2.
+1. Starting at the index.php page look at the header
+2. Click on the gallery page
+3. scroll down to the bottom of the page
+4. View all tags listed out in a black background box with each tag outlined in red
+    - when a tag is added to an image it also adds to this All Tags section
+    - when a tag is deleted from an image it also deletes that tag from the section
 
 How to add a tag to an existing image:
-1.
-2.
+1. Starting at the index.php page look at the header
+2. Click on the gallery page
+3. You should now be viewing a full gallery page containing 12 images and a search bar
+4. Click on one of the images
+5. You should now be viewing an enlarged image of the one you selected on, the name of the image, the source, the tags, an option to add a tag, an option to delete a tag, and a Delete imgae button
+6. Type in the tag that you want to add and click Add
+    - you should now see that tag added to the page
+    - if you type a tag that is already present a repeat tag will not be created
+        - ex. if photo has a tag #apple and you try and add #apple the tag will not be duplicated
 
 How to remove a tag from an existing image:
-1.
-2.
+1. Starting at the index.php page look at the header
+2. Click on the gallery page
+3. You should now be viewing a full gallery page containing 12 images and a search bar
+4. Click on one of the images
+5. You should now be viewing an enlarged image of the one you selected on, the name of the image, the source, the tags, an option to add a tag, an option to delete a tag, and a Delete imgae button
+6. Type in the tag that you want to delete and click delete
+    - you should now see that tag deleted from the image
 
 
 ## Reflection (Final Submission)
 > Take this time to reflect on what you learned during this assignment. How have you improved since starting this class?
+
+
+This assignment was very challenging. I found it really hard to transition from get to post along with PHP as well as the database. I struggled with the JOINS and then remembering to remove the tags or image from both of the tables. I thought this assignment made it hard becasue it was also hard to debug my own code when their was a mistake. However, this project when completed was really rewarding and through all the frustration I am pleased with how it turned out.
+
+I have improved tremendously throughouht this class. It has taught me a lot about hard work, problem solving and persistance. I think I have improved my coding skills and being comfortable with making my mistakes and learning how to then solve them.  I hope you enjoyed my project. Stay safe and thanks for all of your hard work! :)

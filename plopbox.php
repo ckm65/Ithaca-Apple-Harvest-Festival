@@ -37,7 +37,7 @@ if (isset($_POST["submit_upload"])) {
     };
   }
   else {
-      array_push($messages,"Failed to Upload File. Please Try Again");
+      array_push($messages,"Failed to Upload File. Please fill out all parameters and Try Again");
     }
   }
 
@@ -63,7 +63,7 @@ $header_nav_class = "current_page";
 
 <p> Welcome to the Ithaca Apple Harvest Festival Plop Box, a file storing service! </p>
 
-<h2> Upoad a File to the Ithaca Apple Harvest Festival Plop Box </h2>
+<h2> Upoad a File to the Ithaca Apple Harvest Festival Gallery Page </h2>
 
 <?php foreach ($messages as $message) {
         echo "<p><strong>" . htmlspecialchars($message) . "</strong></p>\n";
@@ -89,7 +89,7 @@ $header_nav_class = "current_page";
       </div>
     </form>
 </div>
-<h2> Saved Files </h2>
+<h2> View Saved Files </h2>
 
 <ul style = "list-style-type:none">
       <?php

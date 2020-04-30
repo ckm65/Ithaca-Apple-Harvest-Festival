@@ -10,8 +10,9 @@
         <li class=<?php echo $header_nav_class6;?>><a href="vendors.php">Vendors</a></li>
         <li class=<?php echo $header_nav_class4;?> ><a href="hospitality.php">Hospitality</a></li>
         <li class=<?php echo $header_nav_class3;?> ><a href="gallery.php">Gallery</a></li>
-        <li class=<?php echo $header_nav_class1;?>> <a href="contact.php">Contact Us!</a></li>
         <li class=<?php echo $header_nav_class7;?>> <a href="plopbox.php">Plop Box</a></li>
+        <li class=<?php echo $header_nav_class1;?>> <a href="contact.php">Contact Us!</a></li>
+
 
 
       </ul>
