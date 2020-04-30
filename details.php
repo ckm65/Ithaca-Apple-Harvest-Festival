@@ -93,18 +93,21 @@ $result_2 = exec_sql_query($db, $sql_2, $param_2)->fetchAll();
 $params = array (':tag_del' => $result_2[0]['id'], ':current_image' => $image_to_delete);
 $result = exec_sql_query($db, $sql, $params);
 
+array_push($messages,'Tag Sucessfully Deleted!');
+var_dump($messages);
 }
-
 ?>
+
 
 <!-- ADd tag from image -->
 <?php
 if (isset ($_GET['add_tag_button'])) {
-$sql2 = "SELECT * FROM tags WHERE tags.tag_name = :value";
+$sql2 = "SELECT * FROM tags WHERE tags.tag_name = :input";
 $params = array (
-':value'=> strtolower($_GET['tag_add'])
+    ':input'=> strtolower($_GET['tag_add'])
 );
 $result = exec_sql_query($db, $sql2, $params)->fetchAll();
+
 if (count($result)==0) {
 
 if (isset ($_GET['add_tag_button'])) {
@@ -132,9 +135,9 @@ if (isset ($_GET['add_tag_button'])) {
 $sql = "SELECT * FROM image_tags
 INNER JOIN images ON image_tags.images_id = images.id
 INNER JOIN tags ON image_tags.tags_id=tags.id
-WHERE images.id=:picture";
+WHERE images.id=:image";
 
-$params = array ( ':picture' => $image['id']);
+$params = array ( ':image' => $image['id']);
 $result = exec_sql_query($db, $sql, $params);
 
 ?>
@@ -162,7 +165,7 @@ if (isset ($_GET['delete_image'])) { ?>
     <p id="description"><?php echo htmlspecialchars($image['description']); ?></p>
 </blockquote>
 <blockquote>
-    <p id="source_info">Source: <?php echo htmlspecialchars($image['source']); ?></p>
+    <p id="source_font">Source: <?php echo htmlspecialchars($image['source']); ?></p>
 </blockquote>
 </div>
 <p class="info">Tags: </p>
@@ -181,33 +184,30 @@ foreach($records as $record) {
 
 <!--Add Tag  Submit Button FORM-->
 <div class="center_info">
-<form class="button_image" action="details.php" method="get">
-<div id="words_tag">
+<form class="tags_edt" action="details.php" method="get">
+<div id="space">
 <input type="hidden" value="<?php echo $_GET['id']?>" name="id"/>
-<label id="button_add_tag" for="add_tag_input">Add a Tag:</label>
-  <input id="add_tag" type="text" name="new_tag_add" placeholder="ex #"/>
-  <button class="button_submit" name="add_a_tag" type="submit">Add</button>
-</div>
+<label id="add_tag" for="add_tag_input">Add a Tag:</label>
+  <input id="add_tag_input" type="text" name="tag_add" placeholder="ex #"/>
+  <button class="search_submit" name="add_tag_button" type="submit">Add</button>
 </div>
 </form>
-
+</div>
 
 
 
 <!-- Remove Tag Submit Button FORM -->
 <div class="center_info">
 <br>
-<form class="button_image" action="details.php" method="get">
-<div id = "words_tag">
+<form class="tags_edt" action="details.php" method="get">
 <input type="hidden" value="<?php echo $_GET['id']?>" name="id"/>
-  <label id="button_delete_tag" for="delete_tag_input">Delete a Tag:</label>
-  <input id="delete_tag" type="text" name="new_tag_delete" placeholder="ex #"/>
-  <button class="button_submit" name="delete_a_tag" type="submit">Delete</button>
+  <label id="delete_tag" for="delete_tag_input">Delete a Tag:</label>
+  <input id="delete_tag_input" type="text" name="tag_delete" placeholder="ex #"/>
+  <button class="search_submit" name="delete_tag_button" type="submit">Delete</button>
   <br>
   <button id="delete_image" name="delete_image" type="submit">Delete Image</button>
 
 </form>
-</div>
 </div>
 <?php }
 
