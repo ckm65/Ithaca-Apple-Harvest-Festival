@@ -60,7 +60,8 @@ if (isset($_GET['image'])) {
 
 $result = exec_sql_query(
   $db, "SELECT * FROM images",
-  array());
+  array())->fetchALL();;
+
 
 if (count($result) > 0) {
   ?><div id="galleryContainer">

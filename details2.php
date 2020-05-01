@@ -3,12 +3,12 @@ include("includes/init.php");
 $header_nav_class3 = "current_page";
 $title = "Gallery";
 $messages = array();
-
+$photoid = $_GET['id'];
 ?>
 
 <!-- See whre something is clicked -->
 <?php
-if (isset($_GET['id'])) {
+if (isset($photoid)) {
     $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
     $sql= "SELECT * FROM images WHERE id = :id;";
@@ -41,7 +41,7 @@ if (isset($_GET['id'])) {
 //?>
 
 <!-- Delete an image -->
-<?php if (isset ($_POST
+<?php if (isset ($_GET
 ['delete_image'])) {
 
 $sql_new = "SELECT * FROM images WHERE images.id=:image_delete";
@@ -88,13 +88,13 @@ $header_nav_class = "current_page";
 
 
 <!-- Delete tag from image -->
-<?php if (isset ($_POST['delete_tag_button'])) {
+<?php if (isset ($_GET['delete_tag_button'])) {
 
 $tag_to_delete = filter_input(INPUT_GET, 'tag_delete', FILTER_SANITIZE_STRING);
 $image_to_delete = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-$tag_to_delete = strtolower($_POST['tag_delete']);
-$image_to_delete = strtolower($_POST['id']);
+$tag_to_delete = strtolower($_GET['tag_delete']);
+$image_to_delete = strtolower($_GET['id']);
 $sql = "DELETE FROM image_tags
 WHERE tags_id = :tag_del AND images_id = :current_image" ;
 $sql_2 = "SELECT id FROM tags WHERE tag_name IS :current_tag_name";
@@ -110,28 +110,28 @@ array_push($messages, "Tag Sucessfully Deleted");
 <!-- ADd tag from image -->
 <?php
 
-if (isset ($_POST['add_tag_button'])) {
+if (isset ($_GET['add_tag_button'])) {
 $sql = "SELECT * FROM tags WHERE tag_name = :input";
 $sql2 = "SELECT * FROM image_tags
 INNER JOIN images ON image_tags.images_id = images.id
 INNER JOIN tags ON image_tags.tags_id=tags.id
 WHERE tags.id=:input";
 $params = array (
-    ':input'=> strtolower($_POST['tag_add'])
+    ':input'=> strtolower($_GET['tag_add'])
 );
 $result_1 = exec_sql_query($db, $sql, $params)->fetchAll();
 $result_2 = exec_sql_query($db, $sql2, $params)->fetchAll();
 
 if (count($result_1)==0) {
 
-    $tag_to_add = strtolower($_POST['tag_add']);
+    $tag_to_add = strtolower($_GET['tag_add']);
     $sql = "INSERT INTO tags(tag_name) VALUES (:tag_add)";
     $params = array (':tag_add' => $tag_to_add );
     $result = exec_sql_query($db, $sql, $params);
 
     if ($result) {
         $new_tag_id = $db->lastInsertId("id");
-        $image_id_global = $_POST['id'];
+        $image_id_global = $photoid;
         $sql_tags = "INSERT INTO image_tags(tags_id, images_id) VALUES (:id_add, :image_add)";
         $params_tags = array (
             ':id_add'=>$new_tag_id,
@@ -145,8 +145,7 @@ else{
     INNER JOIN images ON image_tags.images_id = images.id
     INNER JOIN tags ON image_tags.tags_id=tags.id
     WHERE tags.id=:id_add AND images.id = :image_add";
-    $image_id_global = $_POST['id'];
-    var_dump($image_id_global);
+    $image_id_global = $_GET['id'];
             $params_add = array(
                 ':id_add'=>$result_1[0]['id'],
                 ':image_add'=>$image_id_global);
@@ -156,7 +155,6 @@ else{
         $params_add = array(
             ':id_add'=>$result_1[0]['id'],
             ':image_add'=>$image_id_global);
-
 
         $result_3 = exec_sql_query($db, $sql, $params_add);
     }
@@ -180,7 +178,7 @@ $result = exec_sql_query($db, $sql, $params);
 ?>
 <!-- Delete Feedback -->
 <?php
-if (isset ($_POST['delete_image'])) { ?>
+if (isset ($_GET['delete_image'])) { ?>
 
 <p id="image_remove">The image has been removed from the gallery!</p>
 <?php
@@ -221,7 +219,7 @@ foreach($records as $record) {
 
 <!--Add Tag  Submit Button FORM-->
 <div class="center_info">
-<form class="tags_edt" action="details.php?id=<?php echo $_GET['id']?> " method="post">
+<form class="tags_edt" action="details.php" method="get">
 <div id="space">
 <input type="hidden" value="<?php echo $_GET['id']?>" name="id"/>
 <label id="add_tag" for="add_tag_input">Add a Tag:</label>
@@ -236,7 +234,7 @@ foreach($records as $record) {
 <!-- Remove Tag Submit Button FORM -->
 <div class="center_info">
 <br>
-<form class="tags_edt" action="details.php?id=<?php echo $_GET['id']?> " method="post">
+<form class="tags_edt" action="details.php" method="get">
 <input type="hidden" value="<?php echo $_GET['id']?>" name="id"/>
 <div class=message>
   <?php foreach ($messages as $message) {
