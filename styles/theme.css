@@ -553,3 +553,10 @@ dt {
     height: 15px;
     width: 150px;
 }
+
+.message p{
+    color:red;
+    font-size: 12px;
+    text-align:center;
+    padding:0px
+}

@@ -45,6 +45,10 @@ $sql_new = "SELECT * FROM images WHERE images.id=:image_delete";
 $params_new = array (':image_delete' => $id);
 $result_new = exec_sql_query($db, $sql_new, $params_new)->fetchAll();
 
+
+$image_id_del = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$image_ext_del = filter_input(INPUT_GET, 'image_ext', FILTER_VALIDATE_INT);
+
 $image_id_del = $result_new[0]['id'];
 $image_ext_del = $result_new[0]['image_ext'];
 unlink("uploads/festival/$image_id_del.$image_ext_del");
@@ -82,6 +86,10 @@ $header_nav_class = "current_page";
 
 <!-- Delete tag from image -->
 <?php if (isset ($_GET['delete_tag_button'])) {
+
+$tag_to_delete = filter_input(INPUT_GET, 'tag_delete', FILTER_SANITIZE_STRING);
+$image_to_delete = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+
 $tag_to_delete = strtolower($_GET['tag_delete']);
 $image_to_delete = strtolower($_GET['id']);
 $sql = "DELETE FROM image_tags
@@ -92,25 +100,27 @@ $param_2 = array(':current_tag_name'=> $tag_to_delete );
 $result_2 = exec_sql_query($db, $sql_2, $param_2)->fetchAll();
 $params = array (':tag_del' => $result_2[0]['id'], ':current_image' => $image_to_delete);
 $result = exec_sql_query($db, $sql, $params);
-
-array_push($messages,'Tag Sucessfully Deleted!');
-var_dump($messages);
+array_push($messages, "Tag Sucessfully Deleted");
 }
 ?>
 
-
 <!-- ADd tag from image -->
 <?php
+
 if (isset ($_GET['add_tag_button'])) {
-$sql2 = "SELECT * FROM tags WHERE tags.tag_name = :input";
+$sql = "SELECT * FROM tags WHERE tag_name = :input";
+$sql2 = "SELECT * FROM image_tags
+INNER JOIN images ON image_tags.images_id = images.id
+INNER JOIN tags ON image_tags.tags_id=tags.id
+WHERE tags.id=:input";
 $params = array (
     ':input'=> strtolower($_GET['tag_add'])
 );
-$result = exec_sql_query($db, $sql2, $params)->fetchAll();
+$result_1 = exec_sql_query($db, $sql, $params)->fetchAll();
+$result_2 = exec_sql_query($db, $sql2, $params)->fetchAll();
 
-if (count($result)==0) {
+if (count($result_1)==0) {
 
-if (isset ($_GET['add_tag_button'])) {
     $tag_to_add = strtolower($_GET['tag_add']);
     $sql = "INSERT INTO tags(tag_name) VALUES (:tag_add)";
     $params = array (':tag_add' => $tag_to_add );
@@ -125,8 +135,29 @@ if (isset ($_GET['add_tag_button'])) {
             ':image_add'=>$image_id_global);
         $result2 = exec_sql_query($db, $sql_tags, $params_tags);
     }
+
 }
+else{
+    $sql2 = "SELECT * FROM image_tags
+    INNER JOIN images ON image_tags.images_id = images.id
+    INNER JOIN tags ON image_tags.tags_id=tags.id
+    WHERE tags.id=:id_add AND images.id = :image_add";
+            $params_add = array(
+                ':id_add'=>$result_1[0]['id'],
+                ':image_add'=>$image_id_global);
+    $result_2 = exec_sql_query($db, $sql2, $params_add)->fetchAll();
+    if (count($result_2)==0){
+        $sql = "INSERT INTO image_tags(tags_id, images_id) VALUES (:id_add, :image_add)";
+        $params_add = array(
+            ':id_add'=>$result_1[0]['id'],
+            ':image_add'=>$image_id_global);
+
+        $result_3 = exec_sql_query($db, $sql, $params_add);
+    }
 }
+
+
+
 }
 ?>
 
@@ -165,7 +196,7 @@ if (isset ($_GET['delete_image'])) { ?>
     <p id="description"><?php echo htmlspecialchars($image['description']); ?></p>
 </blockquote>
 <blockquote>
-    <p id="source_font">Source: <?php echo htmlspecialchars($image['source']); ?></p>
+    <p id="source_info">Source: <?php echo htmlspecialchars($image['source']); ?></p>
 </blockquote>
 </div>
 <p class="info">Tags: </p>
@@ -201,6 +232,11 @@ foreach($records as $record) {
 <br>
 <form class="tags_edt" action="details.php" method="get">
 <input type="hidden" value="<?php echo $_GET['id']?>" name="id"/>
+<div class=message>
+  <?php foreach ($messages as $message) {
+    echo "<p> <strong>" . htmlspecialchars($message) . "</strong></p>\n";
+  } ?>
+  </div>
   <label id="delete_tag" for="delete_tag_input">Delete a Tag:</label>
   <input id="delete_tag_input" type="text" name="tag_delete" placeholder="ex #"/>
   <button class="search_submit" name="delete_tag_button" type="submit">Delete</button>
