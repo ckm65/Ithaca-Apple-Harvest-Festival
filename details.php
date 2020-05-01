@@ -142,6 +142,7 @@ else{
     INNER JOIN images ON image_tags.images_id = images.id
     INNER JOIN tags ON image_tags.tags_id=tags.id
     WHERE tags.id=:id_add AND images.id = :image_add";
+    $image_id_global = $_GET['id'];
             $params_add = array(
                 ':id_add'=>$result_1[0]['id'],
                 ':image_add'=>$image_id_global);
@@ -217,7 +218,7 @@ foreach($records as $record) {
 <div class="center_info">
 <form class="tags_edt" action="details.php" method="get">
 <div id="space">
-<input type="hidden" value="<?php echo $_GET['id']?>" name="id"/>
+<input type="hidden" value="<?php echo $_POST['id']?>" name="id"/>
 <label id="add_tag" for="add_tag_input">Add a Tag:</label>
   <input id="add_tag_input" type="text" name="tag_add" placeholder="ex #"/>
   <button class="search_submit" name="add_tag_button" type="submit">Add</button>
