@@ -5,7 +5,7 @@ $title = "Plop Box";
 
 $messages = array();
 const MAX_FILE_SIZE = 1000000;
-
+// Outline Credentials from Lab 7/8 created by Kyle Harms
 if (isset($_POST["submit_upload"])) {
 
 

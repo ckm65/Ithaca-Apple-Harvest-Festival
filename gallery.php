@@ -3,6 +3,7 @@ include("includes/init.php");
 $header_nav_class3 = "current_page";
 $title = "Gallery";
 $messages = array();
+// Utilized lecture slides as well as labs and consulting/TA office hours for help!
 ?>
 
 
@@ -26,11 +27,11 @@ $header_nav_class = "current_page";
 
 <form id="search_form" action="gallery.php" method="get">
       <label id= "search_field " for="search_tag">Search a Tag:</label>
-      <input id="search_tag" type="text" name="image" value="<?php if ( isset($image) ) { echo htmlspecialchars($image); } ?>" placeholder="ex. #apples"/>
+      <input id="search_tag" type="text" name="image" value="<?php if ( isset($image) ) { echo htmlspecialchars($image); } ?>" placeholder="ex. apples"/>
       <button id="search_submit" name="search_button" type="submit">Search</button>
 </form>
 
-
+<!-- Search for tags -->
 <?php
 
 if (isset($_GET['image'])) {
@@ -47,22 +48,21 @@ if (isset($_GET['image'])) {
       ':search' => $image
     );
     $result = exec_sql_query($db, $sql, $params);
+
     if ($result) {
       $all_images = $result->fetchALL();
+
     }
   }
 } else {
   $show_image_results = FALSE;
 }
 ?>
-
 <?php if ($show_image_results == FALSE ) {
 
 $result = exec_sql_query(
   $db, "SELECT * FROM images",
   array())->fetchALL();;
-
-
 if (count($result) > 0) {
   ?><div id="galleryContainer">
   <?php
@@ -72,14 +72,15 @@ if (count($result) > 0) {
     echo "<a href=\"details.php?" . http_build_query(array( 'id' => $image['id'])) . "\"><img class=\"gallery_image\" alt=\"image\" src=\"uploads/festival/"  . $image["id"] . "." . $image["image_ext"] . "\"/></a>";
     echo "<p class='name_image'>" .  $image['description'] . "</p>";
     echo "</div>";
-
   }
   ?></div>
+
   <?php
 } else {
   echo '<p>Currently no posts are available.</p>';
 }
-} elseif ( isset($all_images)) {?>
+
+} elseif ((isset($all_images) && (count($all_images) >0))) {?>
 
 <p class="image_remove">View the images tagged: <strong><?php echo htmlspecialchars( $image ); ?></strong></p>
 
@@ -88,18 +89,16 @@ if (count($result) > 0) {
 <?php
 foreach($all_images as $image) {
 
-  echo "<a href=\"details.php?" . http_build_query(array( 'id' => $image['id'])) . "\"><img class=\"gallery_image\" src=\"uploads/festival/" . $image["id"] . "." . $image["image_ext"] . "\"/></a>";
+  echo "<a href=\"details.php?" . http_build_query(array( 'id' => $image['id'])) . "\"><img class=\"gallersy_image\" src=\"uploads/festival/" . $image["id"] . "." . $image["image_ext"] . "\"/></a>";
 }
 ?></div><?php
 } else {
 ?>
-    <p class="image_remove"> No images matched your search of: <strong><?php echo htmlspecialchars( $image );?></strong>. Please search another tag!</p>
+    <p class="image_removal"> No images matched your search of: <strong><?php echo htmlspecialchars( $image );?></strong>. Please search another tag!</p>
 
 <?php } ?>
 
 <!-- All Tags At footer -->
-
-
 <div id="tagss">
 <p>All Tags: </p>
 <?php
@@ -111,7 +110,6 @@ $all_tags = exec_sql_query($db, $sql_tag, $params_tag);
 if ($all_tags) {
 $found_all_tags = $all_tags->fetchAll();
 }
-
 foreach ($found_all_tags as $tag) {
 echo "<span class='tag_decoration'>" . $tag['tag_name'] . "</span>";
 }

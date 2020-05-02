@@ -30,11 +30,11 @@ CREATE TABLE tags (
 
 );
 
-INSERT INTO tags (id, tag_name) VALUES (1, '#dessert');
-INSERT INTO tags (id, tag_name) VALUES (2, '#funk');
-INSERT INTO tags (id, tag_name) VALUES (3, '#cider');
-INSERT INTO tags (id, tag_name) VALUES (4, '#apples');
-INSERT INTO tags (id, tag_name) VALUES (5, '#friends');
+INSERT INTO tags (id, tag_name) VALUES (1, 'dessert');
+INSERT INTO tags (id, tag_name) VALUES (2, 'funk');
+INSERT INTO tags (id, tag_name) VALUES (3, 'cider');
+INSERT INTO tags (id, tag_name) VALUES (4, 'apples');
+INSERT INTO tags (id, tag_name) VALUES (5, 'friends');
 
 CREATE TABLE image_tags (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
