@@ -28,22 +28,22 @@ if (isset($_GET['id'])) {
 <!-- Delete an image -->
 <?php if (isset ($_POST
 ['delete_image'])) {
-$sql_new = "SELECT * FROM images WHERE images.id=:image_delete";
-$params_new = array (':image_delete' => $id);
+$sql_new = "SELECT * FROM images WHERE images.id=:remove_image";
+$params_new = array (':remove_image' => $id);
 $result_new = exec_sql_query($db, $sql_new, $params_new)->fetchAll();
-$image_id_del = $result_new[0]['id'];
-$image_ext_del = $result_new[0]['image_ext'];
-unlink("uploads/festival/$image_id_del.$image_ext_del");
-$sql_delete = "DELETE FROM images WHERE images.id=:image_delete";
+$image_delete = $result_new[0]['id'];
+$image_ext_delete = $result_new[0]['image_ext'];
+unlink("uploads/festival/$image_delete.$image_ext_delete");
+$sql_delete = "DELETE FROM images WHERE images.id=:remove_image";
 
-$delete_params = array (':image_delete' => $id);
+$delete_params = array (':remove_image' => $id);
 $result = exec_sql_query($db, $sql_delete, $delete_params);
 
 if ($result) {
-    $image_id = $id;
-    $sql_image_del = "DELETE FROM image_tags WHERE image_tags.images_id=:image_del";
-    $params_del = array (':image_del'=> $image_id);
-    $result2 = exec_sql_query($db, $sql_image_del, $params_del);
+    $images_id = $id;
+    $sql_image_delete = "DELETE FROM image_tags WHERE image_tags.images_id=:delete_image";
+    $params_delete = array (':delete_image'=> $images_id);
+    $result2 = exec_sql_query($db, $sql_image_delete, $params_delete);
 }
 }
 ?>
@@ -62,19 +62,19 @@ $header_nav_class = "current_page";
 ?>
 
 <!-- Delete tag from image -->
-<?php if (isset ($_POST['delete_tag_button'])) {
+<?php if (isset ($_POST['final_delete'])) {
 
 $tag_to_delete = filter_input(INPUT_POST, 'current_tag_name', FILTER_SANITIZE_STRING);
 $image_to_delete = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 
-$tag_to_delete = strtolower($_POST['tag_delete']);
+$tag_to_delete = strtolower($_POST['remove_tag']);
 $image_to_delete = strtolower($_POST['id']);
 $sql = "DELETE FROM image_tags
-WHERE tags_id = :tag_del AND images_id = :current_image" ;
+WHERE tags_id = :tag_delete2 AND images_id = :current_image" ;
 $sql_2 = "SELECT id FROM tags WHERE tag_name IS :current_tag_name";
 $param_2 = array(':current_tag_name'=> $tag_to_delete );
 $result_2 = exec_sql_query($db, $sql_2, $param_2)->fetchAll();
-$params = array (':tag_del' => $result_2[0]['id'], ':current_image' => $image_to_delete);
+$params = array (':tag_delete2' => $result_2[0]['id'], ':current_image' => $image_to_delete);
 $result = exec_sql_query($db, $sql, $params);
 array_push($messages, "Tag Sucessfully Deleted, view above to confirm!");
 }?>
@@ -204,8 +204,8 @@ foreach($records as $record) {
   } ?>
   </div>
   <label id="delete_tag" for="delete_tag_input">Delete a Tag:</label>
-  <input id="delete_tag_input" type="text" name="tag_delete" placeholder="ex apples"/>
-  <button class="search_submit" name="delete_tag_button" type="submit">Delete</button>
+  <input id="delete_tag_input" type="text" name="remove_tag" placeholder="ex apples"/>
+  <button class="search_submit" name="final_delete" type="submit">Delete</button>
   <br>
   <button id="delete_image" name="delete_image" type="submit">Delete Image</button>
 </form>
